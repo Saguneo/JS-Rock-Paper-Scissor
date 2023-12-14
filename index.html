@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <nav>
+      <p>ROCK PAPER SCISSORS</p>
+    </nav>
+    <main>
+      <p id="winner-message">Choose your hand</p>
+
+      <div class="choice-container">
+        <div class="player-choice">
+          <img id="player-pic" src="./user.png" alt="human icon" />
+          <p id="player-point">Player: 0</p>
+        </div>
+        <div class="comp-choice">
+          <img id="comp-pic" src="./robot.png" alt="robot icon" />
+          <p id="comp-point">AI: 0</p>
+        </div>
+      </div>
+
+      <div class="rps-choice">
+        <button class="game-button" id="rock">
+          <img id="rockpic" src="./rock.png" alt="" />
+        </button>
+        <button class="game-button" id="paper">
+          <img id="paperpic" src="./paper.png" alt="" />
+        </button>
+        <button class="game-button" id="scissor">
+          <img id="scissorpic" src="./scissor.png" alt="" />
+        </button>
+      </div>
+
+      <div id="overlay" class="overlay hidden">
+        <div id="modal" class="modal">
+          <p id="modal-message"></p>
+          <button onclick="resetAll()">Play again</button>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const modalMessage = document.getElementById("modal-message");
+      const overlay = document.getElementById("overlay");
+      const rock = document.getElementById("rock");
+      const paper = document.getElementById("paper");
+      const scissor = document.getElementById("scissor");
+      const playerpic = document.getElementById("player-pic");
+      const comppic = document.getElementById("comp-pic");
+      let playerpoint = document.getElementById("player-point");
+      let comppoint = document.getElementById("comp-point");
+      let winnerMessage = document.getElementById("winner-message");
+      let playerScore = 0;
+      let compScore = 0;
+
+      function getComputerChoice() {
+        const randomNum = Math.floor(Math.random() * 3);
+        switch (randomNum) {
+          case 0:
+            comppic.src = "rock.png";
+            return "rock";
+          case 1:
+            comppic.src = "paper.png";
+            return "paper";
+          case 2:
+            comppic.src = "scissor.png";
+            return "scissors";
+        }
+      }
+
+      function playRps(player, comp) {
+        if (player === comp) {
+          winnerMessage.textContent = "It's a tie!";
+        } else if (
+          (player === "rock" && comp === "scissors") ||
+          (player === "paper" && comp === "rock") ||
+          (player === "scissors" && comp === "paper")
+        ) {
+          playerScore++;
+          playerpoint.textContent = `Player: ${playerScore}`;
+          winnerMessage.textContent = "You win!";
+        } else {
+          winnerMessage.textContent = "You lost!";
+          compScore++;
+          comppoint.textContent = `AI: ${compScore}`;
+        }
+
+        if (playerScore === 5) {
+          showModal("Won!");
+        } else if (compScore === 5) {
+          showModal("Lost..");
+        }
+      }
+
+      function showModal(message) {
+        overlay.classList.remove("hidden");
+        modalMessage.textContent = `You ${message}`;
+      }
+
+      function resetAll() {
+        playerScore = 0;
+        compScore = 0;
+        playerpic.src = "user.png";
+        comppic.src = "robot.png";
+        playerpoint.textContent = "Player: 0";
+        comppoint.textContent = "AI: 0";
+        overlay.classList.add("hidden");
+      }
+
+      rock.addEventListener("click", function () {
+        playRps("rock", getComputerChoice());
+        playerpic.src = "rock.png";
+      });
+
+      paper.addEventListener("click", function () {
+        playRps("paper", getComputerChoice());
+        playerpic.src = "paper.png";
+      });
+
+      scissor.addEventListener("click", function () {
+        playRps("scissors", getComputerChoice());
+        playerpic.src = "scissor.png";
+      });
+    </script>
+  </body>
+</html>
